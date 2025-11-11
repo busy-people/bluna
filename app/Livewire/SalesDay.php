@@ -6,7 +6,6 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use App\Models\Sale;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
 #[Layout('layouts.app')]
 class SalesDay extends Component
@@ -39,7 +38,6 @@ class SalesDay extends Component
         ]);
     }
 
-    // one-click add small bottle
     public function addSmall()
     {
         $this->addSale('small');
@@ -62,22 +60,19 @@ class SalesDay extends Component
             'price' => $price,
             'total' => $price,
         ]);
-
-        // re-render (Livewire will re-render automatically)
     }
 
-    // delete a transaction
     public function deleteSale($id)
     {
-        $s = Sale::find($id);
-        if ($s) $s->delete();
+        if ($s = Sale::find($id)) {
+            $s->delete();
+        }
     }
 
-    // change quantity (increase or decrease)
     public function changeQuantity($id, $delta)
     {
-        $s = Sale::find($id);
-        if (! $s) return;
+        if (! $s = Sale::find($id)) return;
+
         $newQty = max(1, $s->quantity + intval($delta));
         $s->quantity = $newQty;
         $s->total = $s->price * $s->quantity;

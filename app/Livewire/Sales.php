@@ -32,25 +32,9 @@ class Sales extends Component
         ]);
     }
 
-    // tombol Add: auto create a record for current month (makes a dummy day entry if none)
+    // tombol Add: langsung redirect ke bulan ini tanpa membuat data
     public function createCurrentMonth()
     {
-        $today = Carbon::now()->toDateString(); // YYYY-MM-DD
-        // create a placeholder if month has no data (one small bottle record so month exists)
-        $exists = Sale::whereYear('date', Carbon::now()->year)
-                      ->whereMonth('date', Carbon::now()->month)
-                      ->exists();
-
-        if (! $exists) {
-            Sale::create([
-                'date' => $today,
-                'product_type' => 'small',
-                'quantity' => 0, // placeholder zero
-                'price' => config('sales.price_small'),
-                'total' => 0,
-            ]);
-        }
-
         return redirect()->route('sales.month', Carbon::now()->format('Y-m'));
     }
 }

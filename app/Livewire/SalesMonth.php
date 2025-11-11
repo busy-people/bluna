@@ -20,7 +20,6 @@ class SalesMonth extends Component
 
     public function render()
     {
-        // parse year & month
         [$year, $mon] = explode('-', $this->month);
 
         $items = Sale::select(
@@ -39,7 +38,6 @@ class SalesMonth extends Component
             ->orderBy('date', 'asc')
             ->get();
 
-        // total summary for header
         $summary = Sale::whereYear('date', $year)
             ->whereMonth('date', $mon)
             ->select(
@@ -58,23 +56,12 @@ class SalesMonth extends Component
         ]);
     }
 
-    // Add today's day-row (if not exists) and redirect to day page
+    // langsung buka halaman hari ini tanpa membuat data
     public function createToday()
     {
-        $today = Carbon::now()->toDateString();
-        $exists = Sale::whereDate('date', $today)->exists();
-        if (! $exists) {
-            Sale::create([
-                'date' => $today,
-                'product_type' => 'small',
-                'quantity' => 0,
-                'price' => config('sales.price_small'),
-                'total' => 0,
-            ]);
-        }
-
         $month = Carbon::now()->format('Y-m');
         $day = Carbon::now()->format('d');
+
         return redirect()->route('sales.day', [$month, $day]);
     }
 }
