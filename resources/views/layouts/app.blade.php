@@ -8,6 +8,7 @@
     @livewireStyles
 </head>
 <body>
+     {{-- @include('components.sidebar', ['active' => 'sales']) --}}
     {{ $slot }}
     @livewireScripts
 </body>

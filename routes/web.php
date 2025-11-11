@@ -14,6 +14,8 @@ use App\Livewire\Sales;
 use App\Livewire\Contribution;
 use App\Livewire\Member;
 use App\Livewire\Activity;
+use App\Livewire\SalesDay;
+use App\Livewire\SalesMonth;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function() {return view('landing-page');});
@@ -26,6 +28,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/sales', Sales::class)->name('sales');
+     Route::get('/sales', Sales::class)->name('sales');
+    Route::get('/sales/{month}', SalesMonth::class)->name('sales.month');
+    Route::get('/sales/{month}/{day}', SalesDay::class)->name('sales.day');
     Route::get('/contribution', Contribution::class)->name('contribution');
     Route::get('/member', Member::class)->name('member');
     Route::get('/activity', Activity::class)->name('activity');
