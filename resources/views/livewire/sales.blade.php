@@ -4,17 +4,17 @@
     <main class="flex-1 overflow-y-auto">
         <header class="bg-white shadow-sm">
             <div class="px-8 py-4">
-                <h2 class="text-2xl font-bold text-gray-800">Sales - Bulanan</h2>
+                <h2 class="text-2xl font-bold text-gray-800">Sales</h2>
             </div>
         </header>
 
         <div class="p-8">
             <div class="flex items-center justify-between mb-6">
-                <h1 class="text-xl font-semibold">Daftar Sales Bulanan</h1>
+                <h1 class="text-xl font-semibold">Monthly Sales List</h1>
                 <div class="space-x-2">
                     <button wire:click="createCurrentMonth"
                             class="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:opacity-95">
-                        Add Current Month
+                        Tambah Bulan Ini
                     </button>
                 </div>
             </div>

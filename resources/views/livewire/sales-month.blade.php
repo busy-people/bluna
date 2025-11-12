@@ -4,7 +4,7 @@
     <main class="flex-1 overflow-y-auto">
         <header class="bg-white shadow-sm">
             <div class="px-8 py-4">
-                <h2 class="text-2xl font-bold text-gray-800">Sales - Bulanan</h2>
+                <h2 class="text-2xl font-bold text-gray-800">Sales - Monthly</h2>
             </div>
         </header>
         <div class="p-8">
@@ -14,7 +14,7 @@
                 <button wire:click="createToday" class="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow">Add Today</button>
                 <a href="{{ route('sales') }}" class="px-4 py-2 bg-gray-100 rounded-lg">Back</a>
                 </div>
-            </div>    
+            </div>
 
             <div class="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white p-4 rounded-lg shadow">
