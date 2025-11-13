@@ -32,6 +32,8 @@ class CashFlow extends Model
             ],
             'income' => [
                 'penjualan' => 'Penjualan',
+                'kas' => 'Kas',
+                'investasi' => 'Investasi',
                 'lainnya' => 'Lainnya',
             ],
         ];

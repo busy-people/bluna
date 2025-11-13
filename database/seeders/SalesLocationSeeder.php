@@ -10,8 +10,8 @@ class SalesLocationSeeder extends Seeder
     public function run(): void
     {
         $locations = [
-            ['name' => 'Sempur - Kampus', 'address' => 'Area Kampus', 'description' => 'Stand di depan kampus'],
-            ['name' => 'SSA - Mal', 'address' => 'Dekat Gerbang Kebun Raya (Sebrang Lippo PLaza)', 'description' => 'SSA Kebun Raya'],
+            ['name' => 'Sempur', 'address' => 'Depan Mini Soccer (Kopi Nako)', 'description' => 'Stand di depan Mini Socccer'],
+            ['name' => 'SSA', 'address' => 'Dekat Gerbang Kebun Raya (Sebrang Lippo PLaza)', 'description' => 'SSA Kebun Raya'],
         ];
 
         foreach ($locations as $location) {
