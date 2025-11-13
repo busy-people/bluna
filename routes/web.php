@@ -10,6 +10,7 @@ use App\Livewire\SalesDay;
 use App\Livewire\Member;
 use App\Livewire\Activity;
 use App\Livewire\Contribution;
+use App\Livewire\CashFlow;
 use Illuminate\Support\Facades\Auth;
 
 Route::redirect('/', '/login');
@@ -26,6 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/sales', Sales::class)->name('sales');
     Route::get('/sales/{month}', SalesMonth::class)->name('sales.month');
     Route::get('/sales/{month}/{day}', SalesDay::class)->name('sales.day');
+
+    // Cashflow Routes
+    Route::get('/cashflow/{period?}', CashFlow::class)->name('cashflow');
 
     // Member, Activity, Contribution Routes
     Route::get('/member', Member::class)->name('member');

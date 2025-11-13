@@ -8,7 +8,7 @@ use Livewire\Attributes\Layout;
 use App\Models\Sale;
 use App\Models\Contribution;
 use App\Models\Member;
-use App\Models\Payroll;
+use App\Models\CashFlow;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -29,13 +29,22 @@ class Dashboard extends Component
         $currentMonth = Carbon::now()->format('Y-m');
         [$year, $month] = explode('-', $currentMonth);
 
-        // Sales Data
+        // Sales Data (Income)
         $salesData = Sale::whereYear('date', $year)
             ->whereMonth('date', $month)
             ->select(
                 DB::raw('SUM(total) as total_revenue'),
                 DB::raw('SUM(quantity) as total_bottles'),
                 DB::raw('COUNT(*) as total_transactions')
+            )
+            ->first();
+
+        // Cashflow Data
+        $cashFlowData = CashFlow::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->select(
+                DB::raw('SUM(CASE WHEN type = "income" THEN amount ELSE 0 END) as total_income'),
+                DB::raw('SUM(CASE WHEN type = "expense" THEN amount ELSE 0 END) as total_expense')
             )
             ->first();
 
@@ -62,10 +71,23 @@ class Dashboard extends Component
             ->limit(4)
             ->get();
 
-        // Payroll Calculation
-        $totalRevenue = $salesData->total_revenue ?? 0;
-        $operationalCost = $totalRevenue * 0.35; // 35%
-        $netSalary = $totalRevenue * 0.65; // 65%
+        // ===== PERHITUNGAN PAYROLL AKURAT =====
+        // Total Omzet = Sales + Income dari Cashflow
+        $totalRevenue = ($salesData->total_revenue ?? 0) + ($cashFlowData->total_income ?? 0);
+
+        // Total Pengeluaran dari Cashflow
+        $totalExpense = $cashFlowData->total_expense ?? 0;
+
+        // Net Revenue (Omzet - Pengeluaran)
+        $netRevenue = $totalRevenue - $totalExpense;
+
+        // Operational Cost 35% dari Net Revenue
+        $operationalCost = $netRevenue * 0.35;
+
+        // Net Salary 65% dari Net Revenue
+        $netSalary = $netRevenue * 0.65;
+
+        // Point calculation
         $totalPoints = $contributionsData->total_points ?? 0;
         $pointValue = $totalPoints > 0 ? $netSalary / $totalPoints : 0;
 
@@ -74,9 +96,12 @@ class Dashboard extends Component
 
         return view('livewire.dashboard', [
             'salesData' => $salesData,
+            'cashFlowData' => $cashFlowData,
             'contributionsData' => $contributionsData,
             'topContributors' => $topContributors,
             'totalRevenue' => $totalRevenue,
+            'totalExpense' => $totalExpense,
+            'netRevenue' => $netRevenue,
             'operationalCost' => $operationalCost,
             'netSalary' => $netSalary,
             'totalPoints' => $totalPoints,

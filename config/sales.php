@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'price_small' => 5000,  // Harga botol kecil
-    'price_large' => 10000, // Harga botol besar
+    'price_small' => 10000,  // Harga botol kecil
+    'price_large' => 15000, // Harga botol besar
 
     // Salary split
     'operational_percentage' => 35, // 35% untuk modal

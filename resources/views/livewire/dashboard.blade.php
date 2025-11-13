@@ -16,15 +16,15 @@
         </header>
 
         <div class="p-8">
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <!-- Total Revenue -->
+            <!-- Stats Cards Row 1: Revenue & Expenses -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <!-- Total Revenue (Sales + Income) -->
                 <div class="bg-white rounded-lg shadow p-6">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-600 mb-1">Total Omzet</p>
-                            <h3 class="text-2xl font-bold text-gray-800">Rp{{ number_format($totalRevenue, 0, ',', '.') }}</h3>
-                            <p class="text-xs text-blue-600 mt-2">{{ $salesData->total_bottles ?? 0 }} botol terjual</p>
+                            <h3 class="text-2xl font-bold text-blue-600">Rp{{ number_format($totalRevenue, 0, ',', '.') }}</h3>
+                            <p class="text-xs text-blue-500 mt-2">Penjualan + Pemasukan</p>
                         </div>
                         <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                             <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -34,33 +34,33 @@
                     </div>
                 </div>
 
-                <!-- Operational Cost (35%) -->
+                <!-- Total Expenses -->
                 <div class="bg-white rounded-lg shadow p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-gray-600 mb-1">Modal (35%)</p>
-                            <h3 class="text-2xl font-bold text-gray-800">Rp{{ number_format($operationalCost, 0, ',', '.') }}</h3>
-                            <p class="text-xs text-orange-600 mt-2">Untuk operasional & bahan</p>
+                            <p class="text-sm text-gray-600 mb-1">Total Pengeluaran</p>
+                            <h3 class="text-2xl font-bold text-red-600">Rp{{ number_format($totalExpense, 0, ',', '.') }}</h3>
+                            <p class="text-xs text-red-500 mt-2">Belanja & Operasional</p>
                         </div>
-                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                             </svg>
                         </div>
                     </div>
                 </div>
 
-                <!-- Net Salary (65%) -->
+                <!-- Net Revenue -->
                 <div class="bg-white rounded-lg shadow p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-gray-600 mb-1">Gaji Bersih (65%)</p>
-                            <h3 class="text-2xl font-bold text-gray-800">Rp{{ number_format($netSalary, 0, ',', '.') }}</h3>
-                            <p class="text-xs text-green-600 mt-2">Untuk dibagi {{ $activeMembers }} member</p>
+                            <p class="text-sm text-gray-600 mb-1">Omzet Bersih</p>
+                            <h3 class="text-2xl font-bold text-emerald-600">Rp{{ number_format($netRevenue, 0, ',', '.') }}</h3>
+                            <p class="text-xs text-emerald-500 mt-2">Omzet - Pengeluaran</p>
                         </div>
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </div>
                     </div>
@@ -71,8 +71,8 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-600 mb-1">Nilai Per Point</p>
-                            <h3 class="text-2xl font-bold text-gray-800">Rp{{ number_format($pointValue, 0, ',', '.') }}</h3>
-                            <p class="text-xs text-purple-600 mt-2">Total {{ $totalPoints }} points</p>
+                            <h3 class="text-2xl font-bold text-purple-600">Rp{{ number_format($pointValue, 0, ',', '.') }}</h3>
+                            <p class="text-xs text-purple-500 mt-2">{{ $totalPoints }} total points</p>
                         </div>
                         <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                             <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,11 +83,46 @@
                 </div>
             </div>
 
-            <!-- Top Contributors & Salary Projection -->
+            <!-- Stats Cards Row 2: Payroll Breakdown -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Operational Cost (35%) -->
+                <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-orange-700 mb-1">Modal Operasional (35%)</p>
+                            <h3 class="text-3xl font-bold text-orange-900">Rp{{ number_format($operationalCost, 0, ',', '.') }}</h3>
+                            <p class="text-xs text-orange-600 mt-2">Untuk putar modal & operasional</p>
+                        </div>
+                        <div class="w-16 h-16 bg-orange-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Net Salary (65%) -->
+                <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-green-700 mb-1">Gaji Bersih (65%)</p>
+                            <h3 class="text-3xl font-bold text-green-900">Rp{{ number_format($netSalary, 0, ',', '.') }}</h3>
+                            <p class="text-xs text-green-600 mt-2">Dibagi ke {{ $activeMembers }} member berdasarkan point</p>
+                        </div>
+                        <div class="w-16 h-16 bg-green-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Contributors & Recent Activities -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <!-- Top Contributors -->
+                <!-- Top Contributors dengan Proyeksi Gaji -->
                 <div class="bg-white rounded-lg shadow p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Top Contributors Bulan Ini</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Top Contributors & Proyeksi Gaji</h3>
                     <div class="space-y-4">
                         @forelse($topContributors as $contributor)
                             @php
@@ -105,7 +140,10 @@
                                         <p class="text-xs text-gray-500">{{ $contributor->total_points }} points ({{ number_format($percentage, 1) }}%)</p>
                                     </div>
                                 </div>
-                                <span class="text-green-600 font-semibold">Rp{{ number_format($salary, 0, ',', '.') }}</span>
+                                <div class="text-right">
+                                    <div class="text-green-600 font-bold">Rp{{ number_format($salary, 0, ',', '.') }}</div>
+                                    <div class="text-xs text-gray-500">Proyeksi Gaji</div>
+                                </div>
                             </div>
                         @empty
                             <p class="text-gray-500 text-center py-4">Belum ada kontribusi bulan ini</p>
@@ -140,33 +178,51 @@
                 </div>
             </div>
 
+            <!-- Formula Explanation -->
+            <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg shadow p-6 mb-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">💡 Cara Perhitungan Gaji</h3>
+                <div class="space-y-2 text-sm text-gray-700">
+                    <p><span class="font-semibold">1. Omzet Bersih</span> = Total Omzet - Total Pengeluaran</p>
+                    <p><span class="font-semibold">2. Modal (35%)</span> = Omzet Bersih × 35% → untuk belanja bahan & operasional</p>
+                    <p><span class="font-semibold">3. Gaji (65%)</span> = Omzet Bersih × 65% → untuk dibagi ke member</p>
+                    <p><span class="font-semibold">4. Nilai/Point</span> = Gaji ÷ Total Point Semua Member</p>
+                    <p><span class="font-semibold">5. Gaji Member</span> = Point Member × Nilai/Point</p>
+                </div>
+            </div>
+
             <!-- Quick Actions -->
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                     <a href="{{ route('sales') }}" class="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition text-center">
                         <svg class="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                         </svg>
                         <p class="text-sm text-gray-600">Input Sales</p>
                     </a>
+                    <a href="{{ route('cashflow') }}" class="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition text-center">
+                        <svg class="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <p class="text-sm text-gray-600">Cashflow</p>
+                    </a>
                     <a href="{{ route('contribution') }}" class="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition text-center">
                         <svg class="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
-                        <p class="text-sm text-gray-600">Add Kontribusi</p>
+                        <p class="text-sm text-gray-600">Kontribusi</p>
                     </a>
                     <a href="{{ route('member') }}" class="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition text-center">
                         <svg class="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                         </svg>
-                        <p class="text-sm text-gray-600">Manage Member</p>
+                        <p class="text-sm text-gray-600">Member</p>
                     </a>
                     <a href="{{ route('activity') }}" class="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition text-center">
                         <svg class="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                         </svg>
-                        <p class="text-sm text-gray-600">Manage Activity</p>
+                        <p class="text-sm text-gray-600">Activity</p>
                     </a>
                 </div>
             </div>

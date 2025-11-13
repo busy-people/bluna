@@ -12,10 +12,54 @@ use Illuminate\Support\Facades\DB;
 class SalesMonth extends Component
 {
     public string $month; // format: YYYY-MM (from route param)
+    public $showModal = false;
+    public $customDate = '';
+    public $productType = 'small';
+    public $quantity = 1;
+
+    protected $rules = [
+        'customDate' => 'required|date',
+        'productType' => 'required|in:small,large',
+        'quantity' => 'required|integer|min:1',
+    ];
 
     public function mount($month)
     {
         $this->month = $month;
+        $this->customDate = Carbon::createFromFormat('Y-m', $month)->format('Y-m-d');
+    }
+
+    public function openModal()
+    {
+        $this->customDate = Carbon::createFromFormat('Y-m', $this->month)->format('Y-m-d');
+        $this->productType = 'small';
+        $this->quantity = 1;
+        $this->showModal = true;
+        $this->resetValidation();
+    }
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+        $this->reset(['customDate', 'productType', 'quantity']);
+    }
+
+    public function saveCustomSale()
+    {
+        $this->validate();
+
+        $price = $this->productType === 'small' ? config('sales.price_small') : config('sales.price_large');
+
+        Sale::create([
+            'date' => $this->customDate,
+            'product_type' => $this->productType,
+            'quantity' => $this->quantity,
+            'price' => $price,
+            'total' => $price * $this->quantity,
+        ]);
+
+        session()->flash('message', 'Transaksi berhasil ditambahkan!');
+        $this->closeModal();
     }
 
     public function render()
