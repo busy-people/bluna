@@ -13,13 +13,17 @@
 
     <!-- Mobile Sidebar Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        function initializeSidebar() {
             const sidebar = document.getElementById('sidebar');
             const toggle = document.getElementById('sidebar-toggle');
 
             // Toggle sidebar on button click
             if (toggle && sidebar) {
-                toggle.addEventListener('click', function(e) {
+                // Remove existing listener jika ada
+                toggle.replaceWith(toggle.cloneNode(true));
+                const newToggle = document.getElementById('sidebar-toggle');
+
+                newToggle.addEventListener('click', function(e) {
                     e.stopPropagation();
                     sidebar.classList.toggle('hidden');
                     sidebar.classList.toggle('fixed');
@@ -31,9 +35,9 @@
 
             // Close sidebar when clicking outside (only on mobile)
             document.addEventListener('click', function(event) {
-                if (sidebar && toggle && window.innerWidth < 1024) {
+                if (sidebar && window.innerWidth < 1024) {
                     const isClickInsideSidebar = sidebar.contains(event.target);
-                    const isClickOnToggle = toggle.contains(event.target);
+                    const isClickOnToggle = document.getElementById('sidebar-toggle')?.contains(event.target);
 
                     if (!isClickInsideSidebar && !isClickOnToggle && !sidebar.classList.contains('hidden')) {
                         sidebar.classList.add('hidden');
@@ -48,7 +52,16 @@
                     e.stopPropagation();
                 });
             }
-        });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeSidebar);
+
+        // Re-initialize after Livewire navigation
+        document.addEventListener('livewire:navigated', initializeSidebar);
+
+        // Fallback untuk Livewire versi lama
+        document.addEventListener('livewire:load', initializeSidebar);
     </script>
 </body>
 </html>
