@@ -11,16 +11,18 @@ use Illuminate\Support\Facades\DB;
 #[Layout('layouts.app')]
 class SalesMonth extends Component
 {
-    public string $month; // format: YYYY-MM (from route param)
+    public string $month;
     public $showModal = false;
     public $customDate = '';
     public $productType = 'small';
     public $quantity = 1;
+    public $location_id = null;
 
     protected $rules = [
         'customDate' => 'required|date',
         'productType' => 'required|in:small,large',
         'quantity' => 'required|integer|min:1',
+        'location_id' => 'nullable|exists:sales_locations,id',
     ];
 
     public function mount($month)
@@ -34,6 +36,7 @@ class SalesMonth extends Component
         $this->customDate = Carbon::createFromFormat('Y-m', $this->month)->format('Y-m-d');
         $this->productType = 'small';
         $this->quantity = 1;
+        $this->location_id = null;
         $this->showModal = true;
         $this->resetValidation();
     }
@@ -41,7 +44,7 @@ class SalesMonth extends Component
     public function closeModal()
     {
         $this->showModal = false;
-        $this->reset(['customDate', 'productType', 'quantity']);
+        $this->reset(['customDate', 'productType', 'quantity', 'location_id']);
     }
 
     public function saveCustomSale()
@@ -52,6 +55,7 @@ class SalesMonth extends Component
 
         Sale::create([
             'date' => $this->customDate,
+            'location_id' => $this->location_id,
             'product_type' => $this->productType,
             'quantity' => $this->quantity,
             'price' => $price,
@@ -60,6 +64,17 @@ class SalesMonth extends Component
 
         session()->flash('message', 'Transaksi berhasil ditambahkan!');
         $this->closeModal();
+    }
+
+    // Delete all sales for a specific day
+    public function deleteDay($date)
+    {
+        try {
+            Sale::whereDate('date', $date)->delete(); // Auto delete cashflows via model event
+            session()->flash('message', 'Semua transaksi tanggal ' . Carbon::parse($date)->format('d F Y') . ' berhasil dihapus!');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Gagal menghapus data: ' . $e->getMessage());
+        }
     }
 
     public function render()
@@ -93,14 +108,16 @@ class SalesMonth extends Component
                 DB::raw('SUM(total) as total_revenue')
             )->first();
 
+        $locations = \App\Models\SalesLocation::where('is_active', true)->orderBy('name')->get();
+
         return view('livewire.sales-month', [
             'items' => $items,
             'summary' => $summary,
             'monthLabel' => Carbon::createFromFormat('Y-m', $this->month)->format('F Y'),
+            'locations' => $locations,
         ]);
     }
 
-    // langsung buka halaman hari ini tanpa membuat data
     public function createToday()
     {
         $month = Carbon::now()->format('Y-m');

@@ -18,6 +18,7 @@ class SalesDay extends Component
     public $customDate = '';
     public $customQuantity = 1;
     public $location_id = null;
+    public $quickAddLocation = null; // For quick add buttons
 
     protected $rules = [
         'customDate' => 'required|date',
@@ -38,6 +39,7 @@ class SalesDay extends Component
 
         $transactions = Sale::with('location')
             ->whereDate('date', $date)
+            ->orderBy('location_id')
             ->orderBy('created_at', 'asc')
             ->get();
 
@@ -47,7 +49,7 @@ class SalesDay extends Component
         // Summary by location
         $locationSummary = Sale::with('location')
             ->whereDate('date', $date)
-            ->selectRaw('location_id, SUM(quantity) as total_bottles, SUM(total) as total_revenue')
+            ->selectRaw('location_id, SUM(quantity) as total_bottles, SUM(total) as total_revenue, COUNT(*) as total_transactions')
             ->groupBy('location_id')
             ->get();
 
@@ -61,6 +63,42 @@ class SalesDay extends Component
             'locationSummary' => $locationSummary,
             'locations' => $locations,
         ]);
+    }
+
+    public function setQuickLocation($locationId)
+    {
+        $this->quickAddLocation = $locationId;
+    }
+
+    public function addSmall()
+    {
+        $this->addSale('small', $this->quickAddLocation);
+        // DON'T reset location - keep it selected
+        // $this->quickAddLocation remains the same
+    }
+
+    public function addLarge()
+    {
+        $this->addSale('large', $this->quickAddLocation);
+        // DON'T reset location - keep it selected
+        // $this->quickAddLocation remains the same
+    }
+
+    private function addSale(string $type, $locationId = null)
+    {
+        $price = $type === 'small' ? config('sales.price_small') : config('sales.price_large');
+        $date = Carbon::createFromFormat('Y-m-d', "{$this->month}-{$this->day}")->toDateString();
+
+        Sale::create([
+            'date' => $date,
+            'location_id' => $locationId,
+            'product_type' => $type,
+            'quantity' => 1,
+            'price' => $price,
+            'total' => $price,
+        ]);
+
+        session()->flash('message', 'Transaksi berhasil ditambahkan!');
     }
 
     public function openModal($type)
@@ -98,35 +136,11 @@ class SalesDay extends Component
         $this->closeModal();
     }
 
-    public function addSmall()
-    {
-        $this->addSale('small');
-    }
-
-    public function addLarge()
-    {
-        $this->addSale('large');
-    }
-
-    private function addSale(string $type)
-    {
-        $price = $type === 'small' ? config('sales.price_small') : config('sales.price_large');
-        $date = Carbon::createFromFormat('Y-m-d', "{$this->month}-{$this->day}")->toDateString();
-
-        Sale::create([
-            'date' => $date,
-            'location_id' => null,
-            'product_type' => $type,
-            'quantity' => 1,
-            'price' => $price,
-            'total' => $price,
-        ]);
-    }
-
     public function deleteSale($id)
     {
         if ($s = Sale::find($id)) {
-            $s->delete();
+            $s->delete(); // Auto delete cashflow via model event
+            session()->flash('message', 'Transaksi berhasil dihapus!');
         }
     }
 
@@ -137,6 +151,6 @@ class SalesDay extends Component
         $newQty = max(1, $s->quantity + intval($delta));
         $s->quantity = $newQty;
         $s->total = $s->price * $s->quantity;
-        $s->save();
+        $s->save(); // Auto update cashflow via model event
     }
 }

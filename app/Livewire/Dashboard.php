@@ -73,7 +73,7 @@ class Dashboard extends Component
 
         // ===== PERHITUNGAN PAYROLL AKURAT =====
         // Total Omzet = Sales + Income dari Cashflow
-        $totalRevenue = ($salesData->total_revenue ?? 0) + ($cashFlowData->total_income ?? 0);
+        $totalRevenue = $cashFlowData->total_income ?? 0;
 
         // Total Pengeluaran dari Cashflow
         $totalExpense = $cashFlowData->total_expense ?? 0;

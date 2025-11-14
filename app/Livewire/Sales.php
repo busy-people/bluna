@@ -37,4 +37,20 @@ class Sales extends Component
     {
         return redirect()->route('sales.month', Carbon::now()->format('Y-m'));
     }
+
+    // Delete all sales for a month
+    public function deleteMonth($month)
+    {
+        try {
+            [$year, $mon] = explode('-', $month);
+
+            Sale::whereYear('date', $year)
+                ->whereMonth('date', $mon)
+                ->delete(); // Auto delete cashflows via model event
+
+            session()->flash('message', 'Semua data bulan ' . Carbon::createFromFormat('Y-m', $month)->format('F Y') . ' berhasil dihapus!');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Gagal menghapus data: ' . $e->getMessage());
+        }
+    }
 }
